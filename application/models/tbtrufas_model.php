@@ -5,14 +5,14 @@
         public function get_all ()
         {
             $query = $this->db->get('tbtrufas');
-            return $query->result();
+            return $query->result(); // Aqui retorna o array todo
         }
 
         public function get($id)
         {
             $this->db->where('id', $id);
             $query = $this->db->get('tbtrufas');
-            return $query->result();
+            return $query->first_row();
         }
 
         public function insert(){
@@ -47,5 +47,18 @@
       $this->db->where('id', $id);
       $this->db->delete('tbtrufas');
     }
+
+    public function search ($id = null, $nome = null){
+      if (isset($id)){
+        $this->db->where('id', $id);
+        $query = $this->db->get('tbtrufas');
+        return $query->first_row();
+      } elseif (isset($nome)) {
+      $this->db->like('sabor', $nome, 'both');
+      $query = $this->db->get('tbtrufas');
+      return $query->first_row();
+      }
+    }
+
 }
 ?>

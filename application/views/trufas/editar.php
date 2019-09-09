@@ -14,7 +14,7 @@
 
 <form method="post" action="<?php echo base_url('trufas/update');?>">
 
-  <input type="hidden" name="id" value="<?=$trufas->id;?>">
+  <input type="hidden" name="id" value="<?=$trufas->id?>">
 
   <div class="form-group">
     <?php echo form_error('sabor');?>

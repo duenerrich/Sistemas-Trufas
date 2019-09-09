@@ -7,6 +7,7 @@ class Trufas extends CI_Controller
         // Herdo do pai para aqui
         parent::__construct();
         $this->load->model('tbtrufas_model', 'model_trufas');//o segundo parametro eu defino como apelido
+        $this->load->model('clientes_model', 'model_clientes');
     }
 
 
@@ -58,7 +59,7 @@ class Trufas extends CI_Controller
 
     public function editar ($id = null){
       $this->load->view('templates/header');
-      $this->load->view('trufas/editar', array('trufas' => $this->model_trufas->edit($id)));
+      $this->load->view('trufas/editar', array('trufas' => $this->model_trufas->get($id)));
       $this->load->view('templates/footer');
     }
 
@@ -75,9 +76,10 @@ class Trufas extends CI_Controller
         if ($this->model_trufas->input->post('id')){
           $this->model_trufas->update($this->input->post('id'));
           echo "Sucesso ao editar";
-          $this->index();
+          redirect('trufas');
         } else {
-              $this->index();
+          echo "Erro ao editar";
+              redirect('trufas');
         }
 
         }
@@ -87,6 +89,31 @@ class Trufas extends CI_Controller
           $this->model_trufas->excluir($id);
             redirect('trufas');
           }
+
+          public function search (){
+            $sabor = $this->input->post('nome');
+
+            if ($this->model_trufas->search($sabor)){
+              $this->load->view('templates/header');
+              $this->load->view('trufas/pesquisa', array ('trufas'=>$this->model_trufas->search($sabor)));
+              $this->load->view('templates/footer');
+            } else {
+              redirect('trufas');
+              echo '<div class="alert alert-danger ">Trufa não encontrada</div>';
+            }
+          }
+
+
+          public function comprar($id = null){
+
+            $array['trufas'] = $this->model_trufas->search($id);
+            $array['clientes'] = $this->model_clientes->get_all();
+            $this->load->view('templates/header');
+            $this->load->view('trufas/comprar',$array);
+            $this->load->view('templates/header');
+          }
+
+
 }
 
 
